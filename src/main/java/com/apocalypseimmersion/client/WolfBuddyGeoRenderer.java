@@ -2,20 +2,23 @@ package com.apocalypseimmersion.client;
 
 import com.apocalypseimmersion.ApocalypseImmersion;
 import com.google.gson.*;
+import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -33,8 +36,7 @@ public class WolfBuddyGeoRenderer {
         if (event.getSound() == null) return;
         String id = event.getSound().getLocation().toString().toLowerCase();
         if (id.contains("shoot") || id.contains("fire") || id.contains("shot")) {
-            recoilKick = Math.min(1.8f, recoilKick + 1.0f);
-            boxPitchVel += 14.0f; boxRollVel += 6.5f;
+            recoilKick = Math.min(1.8f, recoilKick + 1.0f); boxPitchVel += 14.0f; boxRollVel += 6.5f;
         }
     }
 
@@ -48,20 +50,16 @@ public class WolfBuddyGeoRenderer {
         float speed = (float) p.getDeltaMovement().horizontalDistance(), walkCycle = p.tickCount * 0.52f;
         gunSwayX = Mth.lerp(0.28f, gunSwayX, Mth.clamp(-dy * 1.15f + Mth.cos(walkCycle) * speed * 14f, -24f, 24f));
         gunSwayY = Mth.lerp(0.28f, gunSwayY, Mth.clamp(dp * 0.95f + Math.abs(Mth.sin(walkCycle)) * speed * 10f - (float) p.getDeltaMovement().y * 12f, -20f, 20f));
-        recoilKick *= 0.68f;
-        adsLerp = Mth.lerp(0.32f, adsLerp, mc.options.keyUse.isDown() ? 1.0f : 0.0f);
-
+        recoilKick *= 0.68f; adsLerp = Mth.lerp(0.32f, adsLerp, mc.options.keyUse.isDown() ? 1.0f : 0.0f);
         boxRollVel = (boxRollVel - dy * 0.55f + Mth.sin(walkCycle) * speed * 8.0f - boxRoll * 0.18f) * 0.84f;
         boxPitchVel = (boxPitchVel + dp * 0.48f - (float) p.getDeltaMovement().y * 7.5f - boxPitch * 0.18f) * 0.84f;
         boxRoll += boxRollVel; boxPitch += boxPitchVel;
         if (boxRoll < -3.5f) { boxRoll = -3.5f; boxRollVel = Math.abs(boxRollVel) * 0.52f; }
         else if (boxRoll > 36.0f) { boxRoll = 36.0f; boxRollVel = -Math.abs(boxRollVel) * 0.45f; }
         boxPitch = Mth.clamp(boxPitch, -28.0f, 34.0f);
-
         starRollVel = (starRollVel + (boxRoll - starRoll) * 0.28f - starRoll * 0.12f) * 0.82f;
         starRoll = Mth.clamp(starRoll + starRollVel, -8.0f, 46.0f);
     }
-
     private static void ensureGeoLoaded() {
         if (CUBES != null) return;
         CUBES = new ArrayList<>();
@@ -93,7 +91,7 @@ public class WolfBuddyGeoRenderer {
     }
 
     @SubscribeEvent
-    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+    public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance(); Player p = mc.player;
         if (p == null || mc.screen != null || !mc.options.getCameraType().isFirstPerson() || !WolfBuddyCharmSlot.isCharmEquipped(p.getMainHandItem())) return;
         ensureGeoLoaded(); if (CUBES == null || CUBES.isEmpty()) return;
@@ -101,37 +99,48 @@ public class WolfBuddyGeoRenderer {
         int sw = mc.getWindow().getGuiScaledWidth(), sh = mc.getWindow().getGuiScaledHeight();
         float baseX = Mth.lerp(adsLerp, sw * 0.635f, sw * 0.558f) + gunSwayX + recoilKick * 4.5f;
         float baseY = Mth.lerp(adsLerp, sh * 0.605f, sh * 0.555f) + gunSwayY - recoilKick * 5.5f;
+
+        event.getGuiGraphics().flush();
+        RenderSystem.clear(GlConst.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthMask(true);
+
         PoseStack ps = event.getGuiGraphics().pose();
-        ps.pushPose(); ps.translate(baseX, baseY, 250.0f);
+        ps.pushPose(); ps.translate(baseX, baseY, 120.0f);
         ps.mulPose(Axis.YP.rotationDegrees(Mth.lerp(adsLerp, -32f, -22f) + gunSwayX * 0.35f));
         ps.mulPose(Axis.XP.rotationDegrees(185f + recoilKick * 6.0f));
-        ps.scale(8.2f, 8.2f, 8.2f);
+        ps.scale(8.5f, 8.5f, 8.5f);
 
-        RenderSystem.enableBlend(); RenderSystem.defaultBlendFunc(); RenderSystem.disableDepthTest(); RenderSystem.disableCull();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader); RenderSystem.setShaderTexture(0, WolfBuddyCharmSlot.CHARM_TEX);
-        Tesselator tes = Tesselator.getInstance(); BufferBuilder buf = tes.getBuilder();
-        buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        MultiBufferSource.BufferSource bufSrc = event.getGuiGraphics().bufferSource();
+        VertexConsumer vc = bufSrc.getBuffer(RenderType.entityCutoutNoCull(WolfBuddyCharmSlot.CHARM_TEX));
 
         for (GeoCube c : CUBES) {
             ps.pushPose();
             if (c.bone.equals("charm")) { ps.mulPose(Axis.ZP.rotationDegrees(boxRoll)); ps.mulPose(Axis.XP.rotationDegrees(boxPitch)); }
             else if (c.bone.equals("star_dangler")) { ps.mulPose(Axis.ZP.rotationDegrees(boxRoll)); ps.mulPose(Axis.XP.rotationDegrees(boxPitch)); ps.translate(0f, -5.35f, 0f); ps.mulPose(Axis.ZP.rotationDegrees(starRoll - boxRoll)); ps.translate(0f, 5.35f, 0f); }
             if (c.rotZ != 0f) { ps.translate(c.px, c.py, c.pz); ps.mulPose(Axis.ZP.rotationDegrees(c.rotZ)); ps.translate(-c.px, -c.py, -c.pz); }
-            emitCube(buf, ps.last().pose(), c);
+            emitCube(vc, ps.last(), c);
             ps.popPose();
         }
-        tes.end();
-        RenderSystem.enableCull(); RenderSystem.enableDepthTest(); RenderSystem.disableBlend(); ps.popPose();
+        bufSrc.endBatch();
+        ps.popPose();
     }
 
-    private static void emitCube(BufferBuilder b, Matrix4f m, GeoCube c) {
+    private static void emitCube(VertexConsumer vc, PoseStack.Pose pose, GeoCube c) {
+        Matrix4f m = pose.pose(); Matrix3f n = pose.normal();
         float x0 = c.ox, y0 = c.oy, z0 = c.oz, x1 = c.ox + c.sx, y1 = c.oy + c.sy, z1 = c.oz + c.sz;
-        v(b,m,x1,y0,z0,c.u0.get(0),c.v1.get(0)); v(b,m,x0,y0,z0,c.u1.get(0),c.v1.get(0)); v(b,m,x0,y1,z0,c.u1.get(0),c.v0.get(0)); v(b,m,x1,y1,z0,c.u0.get(0),c.v0.get(0));
-        v(b,m,x0,y0,z1,c.u0.get(1),c.v1.get(1)); v(b,m,x1,y0,z1,c.u1.get(1),c.v1.get(1)); v(b,m,x1,y1,z1,c.u1.get(1),c.v0.get(1)); v(b,m,x0,y1,z1,c.u0.get(1),c.v0.get(1));
-        v(b,m,x0,y0,z0,c.u0.get(2),c.v1.get(2)); v(b,m,x0,y0,z1,c.u1.get(2),c.v1.get(2)); v(b,m,x0,y1,z1,c.u1.get(2),c.v0.get(2)); v(b,m,x0,y1,z0,c.u0.get(2),c.v0.get(2));
-        v(b,m,x1,y0,z1,c.u0.get(3),c.v1.get(3)); v(b,m,x1,y0,z0,c.u1.get(3),c.v1.get(3)); v(b,m,x1,y1,z0,c.u1.get(3),c.v0.get(3)); v(b,m,x1,y1,z1,c.u0.get(3),c.v0.get(3));
-        v(b,m,x0,y1,z1,c.u0.get(4),c.v1.get(4)); v(b,m,x1,y1,z1,c.u1.get(4),c.v1.get(4)); v(b,m,x1,y1,z0,c.u1.get(4),c.v0.get(4)); v(b,m,x0,y1,z0,c.u0.get(4),c.v0.get(4));
-        v(b,m,x0,y0,z0,c.u0.get(5),c.v1.get(5)); v(b,m,x1,y0,z0,c.u1.get(5),c.v1.get(5)); v(b,m,x1,y0,z1,c.u1.get(5),c.v0.get(5)); v(b,m,x0,y0,z1,c.u0.get(5),c.v0.get(5));
+        quad(vc,m,n, x1,y0,z0, x0,y0,z0, x0,y1,z0, x1,y1,z0, c.u0.get(0),c.v0.get(0),c.u1.get(0),c.v1.get(0), 0,0,-1);
+        quad(vc,m,n, x0,y0,z1, x1,y0,z1, x1,y1,z1, x0,y1,z1, c.u0.get(1),c.v0.get(1),c.u1.get(1),c.v1.get(1), 0,0,1);
+        quad(vc,m,n, x0,y0,z0, x0,y0,z1, x0,y1,z1, x0,y1,z0, c.u0.get(2),c.v0.get(2),c.u1.get(2),c.v1.get(2), -1,0,0);
+        quad(vc,m,n, x1,y0,z1, x1,y0,z0, x1,y1,z0, x1,y1,z1, c.u0.get(3),c.v0.get(3),c.u1.get(3),c.v1.get(3), 1,0,0);
+        quad(vc,m,n, x0,y1,z1, x1,y1,z1, x1,y1,z0, x0,y1,z0, c.u0.get(4),c.v0.get(4),c.u1.get(4),c.v1.get(4), 0,1,0);
+        quad(vc,m,n, x0,y0,z0, x1,y0,z0, x1,y0,z1, x0,y0,z1, c.u0.get(5),c.v0.get(5),c.u1.get(5),c.v1.get(5), 0,-1,0);
     }
-    private static void v(BufferBuilder b, Matrix4f m, float x, float y, float z, float u, float v) { b.vertex(m, x, y, z).uv(u, v).color(1f, 1f, 1f, 1f).endVertex(); }
+    private static void quad(VertexConsumer vc, Matrix4f m, Matrix3f n, float x0,float y0,float z0, float x1,float y1,float z1, float x2,float y2,float z2, float x3,float y3,float z3, float u0,float v0,float u1,float v1, float nx,float ny,float nz) {
+        int L = LightTexture.FULL_BRIGHT, O = OverlayTexture.NO_OVERLAY;
+        vc.vertex(m,x0,y0,z0).color(255,255,255,255).uv(u0,v1).overlayCoords(O).uv2(L).normal(n,nx,ny,nz).endVertex();
+        vc.vertex(m,x1,y1,z1).color(255,255,255,255).uv(u1,v1).overlayCoords(O).uv2(L).normal(n,nx,ny,nz).endVertex();
+        vc.vertex(m,x2,y2,z2).color(255,255,255,255).uv(u1,v0).overlayCoords(O).uv2(L).normal(n,nx,ny,nz).endVertex();
+        vc.vertex(m,x3,y3,z3).color(255,255,255,255).uv(u0,v0).overlayCoords(O).uv2(L).normal(n,nx,ny,nz).endVertex();
+    }
 }
