@@ -103,3 +103,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `437c831`)
 - Fix valid JSON arrays in wolf_buddy_charm.geo.json so 3D charm renders in Blockbench & in-game
+
+### Update (2026-11-20 - `f6f9bb9`)
+- Generate valid wolf_buddy_charm.geo.json via Python so 3D charm renders in-game & Blockbench
