@@ -27,3 +27,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `2849a59`)
 - Fix TaCZ null-sound NullPointerException in GunfireDynamicLightBridge (v1.7.14)
+
+### Update (2026-11-20 - `8851fe2`)
+- Fix TaCZ null-sound NullPointerException in DistantGunshotEchoHandler (v1.7.15)
