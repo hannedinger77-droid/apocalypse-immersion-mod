@@ -19,3 +19,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `0430778`)
 - Merge branch 'main' of https://github.com/hannedinger77-droid/apocalypse-immersion-mod
+
+### Update (2026-11-20 - `a1f8cd2`)
+- Add MWLoadout-compatible Talking Chibi Wolf Gun Buddy Charm with glowing neon-red & purple box, dangling star physics, and voice triggers
