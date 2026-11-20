@@ -40,3 +40,6 @@ To keep **Apocalypse Immersion** focused and intuitive, optional HUD/paranoia fe
 
 ## Contributing
 Pull requests are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting bug fixes, compatibility bridges, and new tactical features.
+
+## Changelog
+See [CHANGELOG.md](CHANGELOG.md) for a full history of updates and newly added features.

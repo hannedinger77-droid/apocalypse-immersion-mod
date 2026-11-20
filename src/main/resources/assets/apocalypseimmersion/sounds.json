@@ -1,0 +1,5 @@
+{
+  "indoor_gun_tail": { "sounds": [ "apocalypseimmersion:indoor_gun_tail" ] },
+  "distant_gunshot_crack": { "sounds": [ "apocalypseimmersion:distant_gunshot_crack" ] },
+  "explosive_water_splash": { "sounds": [ "apocalypseimmersion:explosive_water_splash" ] }
+}

@@ -1,0 +1,28 @@
+name: Auto-Update Changelog
+on:
+  push:
+    branches: [ main ]
+permissions:
+  contents: write
+jobs:
+  update-changelog:
+    if: "!contains(github.event.head_commit.message, 'chore(changelog):')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Append latest update to CHANGELOG.md
+        run: |
+          DATE=$(date -u +"%Y-%m-%d")
+          MSG=$(git log -1 --pretty=%s)
+          HASH=$(git log -1 --pretty=%h)
+          ENTRY="\n### Update ($DATE - \`$HASH\`)\n- $MSG\n"
+          printf "%b" "$ENTRY" >> CHANGELOG.md
+      - name: Commit updated CHANGELOG.md
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@://github.com"
+          git add CHANGELOG.md
+          git diff --staged --quiet || git commit -m "chore(changelog): record update [skip ci]"
+          git push
