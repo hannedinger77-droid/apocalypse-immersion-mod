@@ -9,11 +9,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ForgeHooksClient.class, remap = false)
 public class GlobalRenderStageGuardMixin {
-    @Inject(method = "dispatchRenderStage*", at = @At("RETURN"))
-    private static void cleanupLeakedBuffer(CallbackInfo ci) {
+    @Inject(method = "dispatchRenderStage*", at = @At("HEAD"), cancellable = true)
+    private static void skipStageWhenBufferBusy(CallbackInfo ci) {
         try {
             if (Tesselator.getInstance().getBuilder().building()) {
-                Tesselator.getInstance().end();
+                ci.cancel();
             }
         } catch (Throwable ignored) {}
     }
