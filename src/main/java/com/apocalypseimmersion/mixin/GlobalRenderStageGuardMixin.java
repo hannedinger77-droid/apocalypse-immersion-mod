@@ -37,13 +37,4 @@ public class GlobalRenderStageGuardMixin {
             }
         } catch (Throwable ignored) {}
     }
-
-    @Inject(method = "dispatchRenderStage*", at = @At("RETURN"))
-    private static void flushLeakedBufferAfterStage(CallbackInfo ci) {
-        try {
-            if (!isOculusShadowPass() && Tesselator.getInstance().getBuilder().building()) {
-                Tesselator.getInstance().end();
-            }
-        } catch (Throwable ignored) {}
-    }
 }

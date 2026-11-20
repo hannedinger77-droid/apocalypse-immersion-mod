@@ -101,7 +101,7 @@ public class WolfBuddyGeoRenderer {
         float baseY = Mth.lerp(adsLerp, sh * 0.605f, sh * 0.555f) + gunSwayY - recoilKick * 5.5f;
 
         event.getGuiGraphics().flush();
-        RenderSystem.clear(GlConst.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
+        // Oculus-safe GUI depth
         RenderSystem.enableDepthTest();
         RenderSystem.depthMask(true);
 
