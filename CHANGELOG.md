@@ -109,3 +109,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `3b256d4`)
 - Fix shootable torch crash, upgrade 6-tier volumetric torch flame & generate valid charm models
+
+### Update (2026-11-20 - `1165463`)
+- Upgrade Wolf Battle Buddy charm to 35-cube high-poly model with 5-pointed faceted star
