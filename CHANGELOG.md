@@ -118,3 +118,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `1e13e16`)
 - Restore package declaration in WolfBuddyGeoRenderer so 3D charm renders in-game
+
+### Update (2026-11-20 - `3e9f900`)
+- Complete WolfBuddyGeoRenderer with package header & 3D rotations
