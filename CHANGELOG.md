@@ -82,3 +82,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `becdd54`)
 - Wrap all Tesselator begin/end calls in SafeTesselator to eliminate Already building! crash
+
+### Update (2026-11-20 - `96d4af4`)
+- Replace all remaining BufferBuilder.begin/end calls with SafeTesselator
