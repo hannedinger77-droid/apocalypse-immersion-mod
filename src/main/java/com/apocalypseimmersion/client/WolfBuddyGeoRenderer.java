@@ -100,7 +100,7 @@ public class WolfBuddyGeoRenderer {
 
         if (aiming) { ps.translate(-0.105f, -0.045f, 0.38f); ps.mulPose(Axis.YP.rotationDegrees(20f)); }
         else { ps.translate(-0.215f, -0.085f, 0.44f); ps.mulPose(Axis.YP.rotationDegrees(28f)); }
-        ps.scale(0.028f, 0.028f, 0.028f);
+        ps.scale(0.025f, 0.025f, 0.025f);
 
         RenderSystem.enableBlend(); RenderSystem.defaultBlendFunc(); RenderSystem.enableDepthTest(); RenderSystem.disableCull();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);

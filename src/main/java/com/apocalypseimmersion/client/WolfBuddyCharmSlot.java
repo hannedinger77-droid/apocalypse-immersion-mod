@@ -22,8 +22,11 @@ public class WolfBuddyCharmSlot {
     public static boolean isFirearm(ItemStack s) {
         if (s.isEmpty()) return false;
         ResourceLocation id = ForgeRegistries.ITEMS.getKey(s.getItem());
-        String n = ((id != null ? id.toString() : "") + (s.getTag() != null ? s.getTag().toString() : "")).toLowerCase();
-        return n.contains("tacz") || n.contains("ssr") || n.contains("tp_shooting") || n.contains("gunid");
+        String n = ((id != null ? id.toString() : "") + " " + s.getItem().getClass().getName() + " " + (s.getTag() != null ? s.getTag().toString() : "")).toLowerCase();
+        return n.contains("tacz") || n.contains("ssr") || n.contains("tp_shooting") || n.contains("pointblank")
+                || n.contains("mwc") || n.contains("cgm") || n.contains("gun") || n.contains("rifle")
+                || n.contains("pistol") || n.contains("smg") || n.contains("sniper") || n.contains("shotgun")
+                || n.contains("carbine") || n.contains("revolver") || n.contains("lmg") || n.contains("launcher");
     }
 
     public static boolean isCharmEquipped(ItemStack s) {
