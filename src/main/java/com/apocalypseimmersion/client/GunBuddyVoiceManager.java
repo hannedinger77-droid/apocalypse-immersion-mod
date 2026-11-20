@@ -36,7 +36,7 @@ public class GunBuddyVoiceManager {
     private static int cd = 0, creeperCd = 0, emptyCd = 0, sheepCd = 0, chatTimer = 420;
 
     public static void triggerGreet(Player p) { speak(p, GREET, "Hi, I'm Wolf Afton! Hope you're better than my last operator.", true); }
-    public static boolean hasWolfBuddyCharm(ItemStack s) { if (WolfBuddyCharmSlot.isCharmEquipped(s)) return true;
+    public static boolean hasWolfBuddyCharm(ItemStack s) { 
         if (s.isEmpty()) return false;
         CompoundTag tag = s.getTag();
         if (tag == null) return false;
