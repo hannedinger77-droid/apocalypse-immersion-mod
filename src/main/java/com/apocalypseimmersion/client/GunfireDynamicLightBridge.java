@@ -57,7 +57,13 @@ public class GunfireDynamicLightBridge {
                 || combined.contains("tp_shooting") || combined.contains("ssr") || combined.contains("gd656"))
                 && (combined.contains("tacz") || combined.contains("gun") || combined.contains("ssr") || combined.contains("tp_shooting") || combined.contains("pointblank"));
         if (loc.getNamespace().equals("tacz") && resolved.isEmpty()) {
-            isShot = event.getSound().getVolume() >= 1.55f;
+            try {
+                if (event.getSound().getSound() != null) {
+                    isShot = event.getSound().getVolume() >= 1.55f;
+                }
+            } catch (NullPointerException ignored) {
+                isShot = false;
+            }
         }
         if (!isShot) return;
 
