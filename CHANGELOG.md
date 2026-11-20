@@ -79,3 +79,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `a9dcb31`)
 - Harden Tesselator begin/end lifecycle with SafeTesselator across all client renderers
+
+### Update (2026-11-20 - `becdd54`)
+- Wrap all Tesselator begin/end calls in SafeTesselator to eliminate Already building! crash
