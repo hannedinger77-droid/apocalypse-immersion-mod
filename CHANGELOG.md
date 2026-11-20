@@ -37,3 +37,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `7170112`)
 - Add FPS optimization suite, tick-cached dapple rendering & in-game performance settings (v1.7.16)
+
+### Update (2026-11-20 - `a1a7497`)
+- Add 3D Blockbench Wolf Afton Battle Buddy charm & custom voice triggers (v1.7.23)
