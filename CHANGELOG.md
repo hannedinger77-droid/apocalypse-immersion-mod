@@ -43,3 +43,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `83ca07b`)
 - Support all firearm mods & anchor 3D Chibi Wolf keychain charm to gun side rail
+
+### Update (2026-11-20 - `778b428`)
+- Render 3D Blockbench Wolf Battle Buddy charm in 3D viewmodel overlay so it is always visible
