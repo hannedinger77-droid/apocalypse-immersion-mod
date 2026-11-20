@@ -88,3 +88,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `f9595d6`)
 - Add BufferBuilderSelfHealMixin to prevent Already building crashes
+
+### Update (2026-11-20 - `2d227c2`)
+- Register LostCitiesToolsMixin and sanitize all invalid Lost Cities blockstates
