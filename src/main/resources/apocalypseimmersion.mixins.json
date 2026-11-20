@@ -13,7 +13,7 @@
   ],
   "client": [
     "HumanoidModelMixin",
-    "GlobalRenderStageGuardMixin"
+    
   ],
   "injectors": {
     "defaultRequire": 0
