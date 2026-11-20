@@ -124,3 +124,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `6ac4259`)
 - Remove WolfBuddyCharmSlot reference from GunBuddyVoiceManager
+
+### Update (2026-11-20 - `a20d4bf`)
+- Fix IndexOutOfBoundsException in DistantWarzoneAmbience when sound pool is empty
