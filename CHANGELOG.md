@@ -52,3 +52,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `b4f8795`)
 - Make 3D Battle Buddy charm 100% compatible with Oculus shaders & HUD mods
+
+### Update (2026-11-20 - `fc1c99f`)
+- Guard BufferBuilder.building() in DynamicShadowRenderer & world renderers for PiP scopes
