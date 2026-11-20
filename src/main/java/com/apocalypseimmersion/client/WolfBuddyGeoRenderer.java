@@ -2,7 +2,6 @@ package com.apocalypseimmersion.client;
 
 import com.apocalypseimmersion.ApocalypseImmersion;
 import com.google.gson.*;
-import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -35,18 +34,14 @@ public class WolfBuddyGeoRenderer {
     public static void onGunShot(PlaySoundEvent event) {
         if (event.getSound() == null) return;
         String id = event.getSound().getLocation().toString().toLowerCase();
-        if (id.contains("shoot") || id.contains("fire") || id.contains("shot")) {
-            recoilKick = Math.min(1.8f, recoilKick + 1.0f); boxPitchVel += 14.0f; boxRollVel += 6.5f;
-        }
+        if (id.contains("shoot") || id.contains("fire") || id.contains("shot")) { recoilKick = Math.min(1.8f, recoilKick + 1.0f); boxPitchVel += 14.0f; boxRollVel += 6.5f; }
     }
 
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
-        Minecraft mc = Minecraft.getInstance(); Player p = mc.player;
-        if (p == null) return;
-        float dy = Mth.wrapDegrees(p.getYRot() - lastYaw), dp = p.getXRot() - lastPitch;
-        lastYaw = p.getYRot(); lastPitch = p.getXRot();
+        Minecraft mc = Minecraft.getInstance(); Player p = mc.player; if (p == null) return;
+        float dy = Mth.wrapDegrees(p.getYRot() - lastYaw), dp = p.getXRot() - lastPitch; lastYaw = p.getYRot(); lastPitch = p.getXRot();
         float speed = (float) p.getDeltaMovement().horizontalDistance(), walkCycle = p.tickCount * 0.52f;
         gunSwayX = Mth.lerp(0.28f, gunSwayX, Mth.clamp(-dy * 1.15f + Mth.cos(walkCycle) * speed * 14f, -24f, 24f));
         gunSwayY = Mth.lerp(0.28f, gunSwayY, Mth.clamp(dp * 0.95f + Math.abs(Mth.sin(walkCycle)) * speed * 10f - (float) p.getDeltaMovement().y * 12f, -20f, 20f));
@@ -54,8 +49,7 @@ public class WolfBuddyGeoRenderer {
         boxRollVel = (boxRollVel - dy * 0.55f + Mth.sin(walkCycle) * speed * 8.0f - boxRoll * 0.18f) * 0.84f;
         boxPitchVel = (boxPitchVel + dp * 0.48f - (float) p.getDeltaMovement().y * 7.5f - boxPitch * 0.18f) * 0.84f;
         boxRoll += boxRollVel; boxPitch += boxPitchVel;
-        if (boxRoll < -3.5f) { boxRoll = -3.5f; boxRollVel = Math.abs(boxRollVel) * 0.52f; }
-        else if (boxRoll > 36.0f) { boxRoll = 36.0f; boxRollVel = -Math.abs(boxRollVel) * 0.45f; }
+        if (boxRoll < -3.5f) { boxRoll = -3.5f; boxRollVel = Math.abs(boxRollVel) * 0.52f; } else if (boxRoll > 36.0f) { boxRoll = 36.0f; boxRollVel = -Math.abs(boxRollVel) * 0.45f; }
         boxPitch = Mth.clamp(boxPitch, -28.0f, 34.0f);
         starRollVel = (starRollVel + (boxRoll - starRoll) * 0.28f - starRoll * 0.12f) * 0.82f;
         starRoll = Mth.clamp(starRoll + starRollVel, -8.0f, 46.0f);
@@ -73,12 +67,8 @@ public class WolfBuddyGeoRenderer {
                 if (!b.has("cubes")) continue;
                 for (JsonElement ce : b.getAsJsonArray("cubes")) {
                     JsonObject c = ce.getAsJsonObject(); JsonArray o = c.getAsJsonArray("origin"), s = c.getAsJsonArray("size");
-                    float rx = c.has("rotation") ? c.getAsJsonArray("rotation").get(0).getAsFloat() : 0f;
-                    float ry = c.has("rotation") ? c.getAsJsonArray("rotation").get(1).getAsFloat() : 0f;
-                    float rz = c.has("rotation") ? c.getAsJsonArray("rotation").get(2).getAsFloat() : 0f;
-                    float px = c.has("pivot") ? c.getAsJsonArray("pivot").get(0).getAsFloat() : 0f;
-                    float py = c.has("pivot") ? c.getAsJsonArray("pivot").get(1).getAsFloat() : 0f;
-                    float pz = c.has("pivot") ? c.getAsJsonArray("pivot").get(2).getAsFloat() : 0f;
+                    float rx = c.has("rotation") ? c.getAsJsonArray("rotation").get(0).getAsFloat() : 0f, ry = c.has("rotation") ? c.getAsJsonArray("rotation").get(1).getAsFloat() : 0f, rz = c.has("rotation") ? c.getAsJsonArray("rotation").get(2).getAsFloat() : 0f;
+                    float px = c.has("pivot") ? c.getAsJsonArray("pivot").get(0).getAsFloat() : 0f, py = c.has("pivot") ? c.getAsJsonArray("pivot").get(1).getAsFloat() : 0f, pz = c.has("pivot") ? c.getAsJsonArray("pivot").get(2).getAsFloat() : 0f;
                     JsonObject uvObj = c.getAsJsonObject("uv");
                     List<Float> u0 = new ArrayList<>(), v0 = new ArrayList<>(), u1 = new ArrayList<>(), v1 = new ArrayList<>();
                     for (String face : faces) {
@@ -102,11 +92,7 @@ public class WolfBuddyGeoRenderer {
         float baseX = Mth.lerp(adsLerp, sw * 0.635f, sw * 0.558f) + gunSwayX + recoilKick * 4.5f;
         float baseY = Mth.lerp(adsLerp, sh * 0.605f, sh * 0.555f) + gunSwayY - recoilKick * 5.5f;
 
-        event.getGuiGraphics().flush();
-        // Oculus-safe GUI depth
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthMask(true);
-
+        event.getGuiGraphics().flush(); RenderSystem.enableDepthTest(); RenderSystem.depthMask(true);
         PoseStack ps = event.getGuiGraphics().pose();
         ps.pushPose(); ps.translate(baseX, baseY, 260.0f);
         ps.mulPose(Axis.YP.rotationDegrees(Mth.lerp(adsLerp, -32f, -22f) + gunSwayX * 0.35f));
@@ -124,8 +110,7 @@ public class WolfBuddyGeoRenderer {
             emitCube(vc, ps.last(), c);
             ps.popPose();
         }
-        bufSrc.endBatch();
-        ps.popPose();
+        bufSrc.endBatch(); ps.popPose();
     }
 
     private static void emitCube(VertexConsumer vc, PoseStack.Pose pose, GeoCube c) {
@@ -138,6 +123,7 @@ public class WolfBuddyGeoRenderer {
         quad(vc,m,n, x0,y1,z1, x1,y1,z1, x1,y1,z0, x0,y1,z0, c.u0.get(4),c.v0.get(4),c.u1.get(4),c.v1.get(4), 0,1,0);
         quad(vc,m,n, x0,y0,z0, x1,y0,z0, x1,y0,z1, x0,y0,z1, c.u0.get(5),c.v0.get(5),c.u1.get(5),c.v1.get(5), 0,-1,0);
     }
+
     private static void quad(VertexConsumer vc, Matrix4f m, Matrix3f n, float x0,float y0,float z0, float x1,float y1,float z1, float x2,float y2,float z2, float x3,float y3,float z3, float u0,float v0,float u1,float v1, float nx,float ny,float nz) {
         int L = LightTexture.FULL_BRIGHT, O = OverlayTexture.NO_OVERLAY;
         vc.vertex(m,x0,y0,z0).color(255,255,255,255).uv(u0,v1).overlayCoords(O).uv2(L).normal(n,nx,ny,nz).endVertex();
