@@ -46,3 +46,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `778b428`)
 - Render 3D Blockbench Wolf Battle Buddy charm in 3D viewmodel overlay so it is always visible
+
+### Update (2026-11-20 - `83dfe59`)
+- Add gun-follow physics, receiver collision & BufferBuilder PiP scope guard (v1.7.25)
