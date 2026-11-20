@@ -97,3 +97,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `301b269`)
 - Use exact SRG descriptor and force reset building flag in BufferBuilderSelfHealMixin
+
+### Update (2026-11-20 - `21cb222`)
+- Restore clean build.gradle with MixinConfigs and BufferBuilderSelfHealMixin
