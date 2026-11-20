@@ -73,3 +73,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `33a030b`)
 - Remove mid-frame Tesselator.end() & GL_DEPTH_BUFFER_BIT clear to prevent Oculus/Embeddium freeze
+
+### Update (2026-11-20 - `254669b`)
+- Remove GlobalRenderStageGuardMixin so Oculus, FancyMenu & Forge render stages stay paired
