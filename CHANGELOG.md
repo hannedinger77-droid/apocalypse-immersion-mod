@@ -67,3 +67,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `1b75c43`)
 - Add Oculus ShadowRenderingState guard to GlobalRenderStageGuardMixin
+
+### Update (2026-11-20 - `5201f8e`)
+- Add post-stage BufferBuilder leak flush guard to GlobalRenderStageGuardMixin
