@@ -108,7 +108,7 @@ public class WolfBuddyGeoRenderer {
         RenderSystem.depthMask(true);
 
         PoseStack ps = event.getGuiGraphics().pose();
-        ps.pushPose(); ps.translate(baseX, baseY, 120.0f);
+        ps.pushPose(); ps.translate(baseX, baseY, 260.0f);
         ps.mulPose(Axis.YP.rotationDegrees(Mth.lerp(adsLerp, -32f, -22f) + gunSwayX * 0.35f));
         ps.mulPose(Axis.XP.rotationDegrees(185f + recoilKick * 6.0f));
         ps.scale(8.5f, 8.5f, 8.5f);
