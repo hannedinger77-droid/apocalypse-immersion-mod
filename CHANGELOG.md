@@ -31,3 +31,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `8851fe2`)
 - Fix TaCZ null-sound NullPointerException in DistantGunshotEchoHandler (v1.7.15)
+
+### Update (2026-11-20 - `7170112`)
+- Add FPS optimization suite, tick-cached dapple rendering & in-game performance settings (v1.7.16)
