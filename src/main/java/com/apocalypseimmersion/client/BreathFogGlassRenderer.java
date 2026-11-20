@@ -56,7 +56,7 @@ public class BreathFogGlassRenderer {
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         RenderSystem.setShaderTexture(0, new ResourceLocation("apocalypseimmersion", "textures/misc/breath_fog.png"));
         Tesselator tes = Tesselator.getInstance(); BufferBuilder buf = tes.getBuilder();
-        if (buf.building()) return; buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        SafeTesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
         Matrix4f m = ps.last().pose();
         for (var en : FOG.entrySet()) {
             BlockPos p = en.getKey(); float raw = en.getValue(); float smooth = raw * raw * (3.0F - 2.0F * raw); float a = Math.min(0.95F, smooth * maxA); if (a <= 0.003F) continue;
@@ -68,7 +68,7 @@ public class BreathFogGlassRenderer {
                 for (Direction d : Direction.values()) if (!isGlass(mc.level.getBlockState(p.relative(d)))) f(buf, m, x, y, z, d, a);
             }
         }
-        tes.end(); RenderSystem.depthMask(true); RenderSystem.enableCull(); RenderSystem.disableBlend(); ps.popPose();
+        SafeTesselator.end(); RenderSystem.depthMask(true); RenderSystem.enableCull(); RenderSystem.disableBlend(); ps.popPose();
     }
     private static void q(BufferBuilder b, Matrix4f m, float x1, float y1, float z1, float x2, float y2, float z2, float a, boolean xy) {
         b.vertex(m, x1, y1, z1).uv(0F, 1F).color(1F, 1F, 1F, a).endVertex();

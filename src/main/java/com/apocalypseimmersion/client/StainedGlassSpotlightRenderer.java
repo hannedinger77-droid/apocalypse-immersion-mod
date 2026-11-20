@@ -53,7 +53,7 @@ public class StainedGlassSpotlightRenderer {
 
         Tesselator tes = Tesselator.getInstance();
         BufferBuilder buf = tes.getBuilder();
-        if (buf.building()) return; buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        SafeTesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         Matrix4f m = ps.last().pose();
         boolean any = false;
 
@@ -143,7 +143,7 @@ public class StainedGlassSpotlightRenderer {
             }
         }
 
-        if (any) tes.end();
+        if (any) SafeTesselator.end();
         RenderSystem.depthMask(true);
         RenderSystem.enableCull();
         RenderSystem.disableBlend();
