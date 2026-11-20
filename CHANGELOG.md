@@ -23,3 +23,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `a1f8cd2`)
 - Add MWLoadout-compatible Talking Chibi Wolf Gun Buddy Charm with glowing neon-red & purple box, dangling star physics, and voice triggers
+
+### Update (2026-11-20 - `2849a59`)
+- Fix TaCZ null-sound NullPointerException in GunfireDynamicLightBridge (v1.7.14)
