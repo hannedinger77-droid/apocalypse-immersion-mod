@@ -7,12 +7,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(BufferBuilder.class)
+@Mixin(value = BufferBuilder.class, remap = false)
 public abstract class BufferBuilderSelfHealMixin {
-    @Shadow private boolean building;
-    @Shadow public abstract void discard();
+    @Shadow(aliases = {"f_85661_"}) private boolean building;
+    @Shadow(aliases = {"m_85730_"}) public abstract void discard();
 
-    @Inject(method = "begin", at = @At("HEAD"))
+    @Inject(method = {"begin", "m_166779_"}, at = @At("HEAD"))
     private void apocalypseimmersion$selfHealAlreadyBuilding(CallbackInfo ci) {
         if (this.building) {
             try {
