@@ -70,7 +70,7 @@ public class ShootableLightBreaker {
     public static void onProjectileImpact(ProjectileImpactEvent event) {
         if (!(event.getProjectile().level() instanceof ServerLevel sl)) return;
         if (event.getRayTraceResult() instanceof BlockHitResult bhr) {
-            handleBlockHit(sl, bhr.getBlockPos());
+            BlockPos p = bhr.getBlockPos().immutable(); sl.getServer().execute(() -> handleBlockHit(sl, p));
         }
     }
 
@@ -86,7 +86,7 @@ public class ShootableLightBreaker {
         Vec3 end = start.add(vel.normalize().scale(64.0));
         BlockHitResult hit = sl.clip(new ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, e));
         if (hit.getType() == HitResult.Type.BLOCK) {
-            handleBlockHit(sl, hit.getBlockPos());
+            BlockPos p = hit.getBlockPos().immutable(); sl.getServer().execute(() -> handleBlockHit(sl, p));
         }
     }
 }
