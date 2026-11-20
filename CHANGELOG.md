@@ -14,6 +14,7 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 ### Fixed
 - **Zero-Delay Reloads & Gun Swaps:** Bypassed reload, magazine, bolt, and weapon-swap sounds so they play instantly with zero latency and zero accidental explosion triggers.
 - **Floor-Grounded Dynamic Shadows:** Fixed elevated wall shadow artifacts so block and entity shadows stretch cleanly across the ground plane.
+- **Performance & FPS Optimization Suite (v1.7.16):** Added tick-cached block geometry for leaf/window dapple projections, auto low-FPS throttling, configurable scan radii, and in-game Settings toggles/sliders for Custom Shadows, Leaf Dapple, Scan Cache Ticks, and Particle Density.
 - **TaCZ Null-Sound Crash Fix (v1.7.14):** Safely guarded `AbstractSoundInstance.getVolume()` in `GunfireDynamicLightBridge` so custom TaCZ draw/weapon sounds with uninitialized inner `Sound` objects never trigger a `NullPointerException`.
 - **TaCZ Echo Handler Null-Sound Fix (v1.7.15):** Added the same null-sound guard to `DistantGunshotEchoHandler.onSoundPlayed` so TaCZ draw/handling sounds with uninitialized inner `Sound` objects never crash the client.
 ### Update (2026-11-20 - `659ba39`)

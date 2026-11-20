@@ -1,5 +1,6 @@
 package com.apocalypseimmersion.client;
 import com.apocalypseimmersion.ApocalypseImmersion;
+import com.apocalypseimmersion.config.ApocalypseImmersionConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -56,7 +57,7 @@ public class DynamicShadowRenderer {
     @SubscribeEvent public static void onRender(RenderLevelStageEvent e) {
         if (e.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) return;
         Minecraft mc = Minecraft.getInstance(); Level lvl = mc.level; Player p = mc.player;
-        if (lvl == null || p == null) return;
+        if (lvl == null || p == null || !ApocalypseImmersionConfig.ENABLE_DYNAMIC_SHADOWS.get()) return;
         boolean fl = TacticalLightHelper.hasAnyActiveFlashlight(p); Vec3 lp = findLight(lvl, p); if (lp == null) return;
         Vec3 look = p.getLookAngle().normalize(); double maxR = fl ? 18.0 : 12.0;
         Vec3 cam = e.getCamera().getPosition();
@@ -82,7 +83,7 @@ public class DynamicShadowRenderer {
             }
         }
 
-        int rScan = fl ? 14 : 9; BlockPos pc = p.blockPosition();
+        int rScan = PerformanceOptimizer.getEffectiveRadius(fl ? 12 : 8); BlockPos pc = p.blockPosition();
         for (int x = -rScan; x <= rScan; x++) for (int z = -rScan; z <= rScan; z++) {
             for (int y = -2; y <= 2; y++) {
                 BlockPos bp = pc.offset(x, y, z); BlockState st = lvl.getBlockState(bp);

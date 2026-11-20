@@ -57,7 +57,7 @@ public class StainedGlassSpotlightRenderer {
         Matrix4f m = ps.last().pose();
         boolean any = false;
 
-        int r = 20;
+        int r = PerformanceOptimizer.getEffectiveRadius(14);
         for (int dx = -r; dx <= r; dx++) {
             for (int dy = -6; dy <= 12; dy++) {
                 for (int dz = -r; dz <= r; dz++) {

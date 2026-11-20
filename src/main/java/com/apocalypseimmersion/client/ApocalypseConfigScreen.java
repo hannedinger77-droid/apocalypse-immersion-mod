@@ -12,7 +12,7 @@ public class ApocalypseConfigScreen extends Screen {
     public ApocalypseConfigScreen(Screen parent) { super(Component.literal("Apocalypse Immersion Settings")); this.parent = parent; }
 
     @Override protected void init() {
-        int l = this.width / 2 - 155, r = this.width / 2 + 5, y = 12, h = 16;
+        int l = this.width / 2 - 155, r = this.width / 2 + 5, y = 10, h = 14;
         addRenderableWidget(tog(l, y, 150, "Universal Compat", ApocalypseImmersionConfig.UNIVERSAL_MOD_COMPAT));
         addRenderableWidget(tog(r, y, 150, "Curios Belt Slot", ApocalypseImmersionConfig.ENABLE_CURIOS_BELT));
         addRenderableWidget(tog(l, y + h, 150, "Lost Cities Fix", ApocalypseImmersionConfig.FIX_LOST_CITIES_FACING));
@@ -32,14 +32,21 @@ public class ApocalypseConfigScreen extends Screen {
         addRenderableWidget(tog(l, y + h * 8, 150, "Acoustic Radar HUD", ApocalypseImmersionConfig.ENABLE_SOUND_RADAR_HUD));
         addRenderableWidget(tog(r, y + h * 8, 150, "Warzone Ambience", ApocalypseImmersionConfig.ENABLE_WARZONE_AMBIENCE));
 
-        addRenderableWidget(new Sld(l, y + h * 9, 150, 14, "Distant Gun Range", ApocalypseImmersionConfig.DISTANT_GUN_RANGE, 64.0, 512.0));
-        addRenderableWidget(new Sld(r, y + h * 9, 150, 14, "NPC Echo Strength", ApocalypseImmersionConfig.NPC_ECHO_INTENSITY, 0.0, 2.0));
-        addRenderableWidget(new Sld(l, y + h * 10, 150, 14, "Glass Fog Alpha", ApocalypseImmersionConfig.BREATH_FOG_VISIBILITY, 0.1, 0.95));
-        addRenderableWidget(new Sld(r, y + h * 10, 150, 14, "Warzone Freq", ApocalypseImmersionConfig.WARZONE_FREQUENCY, 0.1, 3.0));
-        addRenderableWidget(new Sld(l, y + h * 11, 150, 14, "Waist Side", ApocalypseImmersionConfig.WAIST_LIGHT_SIDE_OFFSET, -1.0, 1.0));
-        addRenderableWidget(new Sld(r, y + h * 11, 150, 14, "Waist Height", ApocalypseImmersionConfig.WAIST_LIGHT_HEIGHT_OFFSET, -1.0, 1.0));
+        addRenderableWidget(new Sld(l, y + h * 9, 150, 13, "Distant Gun Range", ApocalypseImmersionConfig.DISTANT_GUN_RANGE, 64.0, 512.0));
+        addRenderableWidget(new Sld(r, y + h * 9, 150, 13, "NPC Echo Strength", ApocalypseImmersionConfig.NPC_ECHO_INTENSITY, 0.0, 2.0));
+        addRenderableWidget(new Sld(l, y + h * 10, 150, 13, "Glass Fog Alpha", ApocalypseImmersionConfig.BREATH_FOG_VISIBILITY, 0.1, 0.95));
+        addRenderableWidget(new Sld(r, y + h * 10, 150, 13, "Warzone Freq", ApocalypseImmersionConfig.WARZONE_FREQUENCY, 0.1, 3.0));
+        addRenderableWidget(new Sld(l, y + h * 11, 150, 13, "Waist Side", ApocalypseImmersionConfig.WAIST_LIGHT_SIDE_OFFSET, -1.0, 1.0));
+        addRenderableWidget(new Sld(r, y + h * 11, 150, 13, "Waist Height", ApocalypseImmersionConfig.WAIST_LIGHT_HEIGHT_OFFSET, -1.0, 1.0));
 
-        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, b -> onClose()).bounds(this.width / 2 - 75, this.height - 18, 150, 15).build());
+        addRenderableWidget(tog(l, y + h * 12, 150, "Custom Shadows", ApocalypseImmersionConfig.ENABLE_DYNAMIC_SHADOWS));
+        addRenderableWidget(tog(r, y + h * 12, 150, "Leaf/Window Dapple", ApocalypseImmersionConfig.ENABLE_LEAF_DAPPLE));
+        addRenderableWidget(tog(l, y + h * 13, 150, "Auto Low-FPS Boost", ApocalypseImmersionConfig.AUTO_LOW_FPS_OPTIMIZER));
+        addRenderableWidget(new Sld(r, y + h * 13, 150, 13, "Scan Radius", ApocalypseImmersionConfig.EFFECT_SCAN_RADIUS, 4.0, 20.0));
+        addRenderableWidget(new Sld(l, y + h * 14, 150, 13, "Scan Cache Ticks", ApocalypseImmersionConfig.CACHE_UPDATE_TICKS, 1.0, 20.0));
+        addRenderableWidget(new Sld(r, y + h * 14, 150, 13, "Particle Scale", ApocalypseImmersionConfig.PARTICLE_SCALE, 0.1, 1.5));
+
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, b -> onClose()).bounds(this.width / 2 - 75, this.height - 18, 150, 13).build());
     }
     private Button tog(int x, int y, int w, String lbl, ForgeConfigSpec.BooleanValue v) {
         return Button.builder(Component.literal(lbl + ": " + (v.get() ? "\u00A7aON" : "\u00A7cOFF")), b -> {
