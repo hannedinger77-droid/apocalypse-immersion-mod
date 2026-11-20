@@ -16,3 +16,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 - **Floor-Grounded Dynamic Shadows:** Fixed elevated wall shadow artifacts so block and entity shadows stretch cleanly across the ground plane.
 ### Update (2026-11-20 - `659ba39`)
 - Add custom .ogg acoustics, 3D water plumes, stained-glass spotlights, SSR5 laser bridge & auto-changelog
+
+### Update (2026-11-20 - `0430778`)
+- Merge branch 'main' of https://github.com/hannedinger77-droid/apocalypse-immersion-mod
