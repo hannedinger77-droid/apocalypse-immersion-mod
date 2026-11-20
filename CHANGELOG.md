@@ -64,3 +64,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `7acaa6c`)
 - Cancel RenderLevelStageEvent at HEAD when Oculus shadow BufferBuilder is active (v1.7.31)
+
+### Update (2026-11-20 - `1b75c43`)
+- Add Oculus ShadowRenderingState guard to GlobalRenderStageGuardMixin
