@@ -27,7 +27,7 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = ApocalypseImmersion.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WolfBuddyGeoRenderer {
     private static final ResourceLocation CHARM_GEO = ResourceLocation.fromNamespaceAndPath("apocalypseimmersion", "models/charm/wolf_buddy_charm.geo.json");
-    private record GeoCube(String bone, float ox, float oy, float oz, float sx, float sy, float sz, float rotZ, float px, float py, float pz, List<Float> u0, List<Float> v0, List<Float> u1, List<Float> v1) {}
+    private record GeoCube(String bone, float ox, float oy, float oz, float sx, float sy, float sz, float rotX, float rotY, float rotZ, float px, float py, float pz, List<Float> u0, List<Float> v0, List<Float> u1, List<Float> v1) {}
     private static List<GeoCube> CUBES = null;
     private static float gunSwayX = 0f, gunSwayY = 0f, recoilKick = 0f, boxRoll = 0f, boxRollVel = 0f, boxPitch = 0f, boxPitchVel = 0f, starRoll = 0f, starRollVel = 0f, lastYaw = 0f, lastPitch = 0f, adsLerp = 0f;
 
@@ -73,6 +73,8 @@ public class WolfBuddyGeoRenderer {
                 if (!b.has("cubes")) continue;
                 for (JsonElement ce : b.getAsJsonArray("cubes")) {
                     JsonObject c = ce.getAsJsonObject(); JsonArray o = c.getAsJsonArray("origin"), s = c.getAsJsonArray("size");
+                    float rx = c.has("rotation") ? c.getAsJsonArray("rotation").get(0).getAsFloat() : 0f;
+                    float ry = c.has("rotation") ? c.getAsJsonArray("rotation").get(1).getAsFloat() : 0f;
                     float rz = c.has("rotation") ? c.getAsJsonArray("rotation").get(2).getAsFloat() : 0f;
                     float px = c.has("pivot") ? c.getAsJsonArray("pivot").get(0).getAsFloat() : 0f;
                     float py = c.has("pivot") ? c.getAsJsonArray("pivot").get(1).getAsFloat() : 0f;
@@ -84,7 +86,7 @@ public class WolfBuddyGeoRenderer {
                         u0.add(u.get(0).getAsFloat() / 256f); v0.add(u.get(1).getAsFloat() / 256f);
                         u1.add((u.get(0).getAsFloat() + us.get(0).getAsFloat()) / 256f); v1.add((u.get(1).getAsFloat() + us.get(1).getAsFloat()) / 256f);
                     }
-                    CUBES.add(new GeoCube(bName, o.get(0).getAsFloat(), o.get(1).getAsFloat(), o.get(2).getAsFloat(), s.get(0).getAsFloat(), s.get(1).getAsFloat(), s.get(2).getAsFloat(), rz, px, py, pz, u0, v0, u1, v1));
+                    CUBES.add(new GeoCube(bName, o.get(0).getAsFloat(), o.get(1).getAsFloat(), o.get(2).getAsFloat(), s.get(0).getAsFloat(), s.get(1).getAsFloat(), s.get(2).getAsFloat(), rx, ry, rz, px, py, pz, u0, v0, u1, v1));
                 }
             }
         } catch (Exception e) { e.printStackTrace(); }
@@ -117,8 +119,8 @@ public class WolfBuddyGeoRenderer {
         for (GeoCube c : CUBES) {
             ps.pushPose();
             if (c.bone.equals("charm")) { ps.mulPose(Axis.ZP.rotationDegrees(boxRoll)); ps.mulPose(Axis.XP.rotationDegrees(boxPitch)); }
-            else if (c.bone.equals("star_dangler")) { ps.mulPose(Axis.ZP.rotationDegrees(boxRoll)); ps.mulPose(Axis.XP.rotationDegrees(boxPitch)); ps.translate(0f, -5.35f, 0f); ps.mulPose(Axis.ZP.rotationDegrees(starRoll - boxRoll)); ps.translate(0f, 5.35f, 0f); }
-            if (c.rotZ != 0f) { ps.translate(c.px, c.py, c.pz); ps.mulPose(Axis.ZP.rotationDegrees(c.rotZ)); ps.translate(-c.px, -c.py, -c.pz); }
+            else if (c.bone.equals("star_dangler")) { ps.mulPose(Axis.ZP.rotationDegrees(boxRoll)); ps.mulPose(Axis.XP.rotationDegrees(boxPitch)); ps.translate(0f, -6.05f, 0f); ps.mulPose(Axis.ZP.rotationDegrees(starRoll - boxRoll)); ps.translate(0f, 6.05f, 0f); }
+            if (c.rotX != 0f || c.rotY != 0f || c.rotZ != 0f) { ps.translate(c.px, c.py, c.pz); if (c.rotZ != 0f) ps.mulPose(Axis.ZP.rotationDegrees(c.rotZ)); if (c.rotY != 0f) ps.mulPose(Axis.YP.rotationDegrees(c.rotY)); if (c.rotX != 0f) ps.mulPose(Axis.XP.rotationDegrees(c.rotX)); ps.translate(-c.px, -c.py, -c.pz); }
             emitCube(vc, ps.last(), c);
             ps.popPose();
         }
