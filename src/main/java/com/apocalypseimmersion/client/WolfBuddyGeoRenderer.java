@@ -10,9 +10,8 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -78,34 +77,41 @@ public class WolfBuddyGeoRenderer {
     }
 
     @SubscribeEvent
-    public static void onRenderLevel(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_ENTITIES) return;
+    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
-        if (p == null || !mc.options.getCameraType().isFirstPerson()) return;
+        if (p == null || mc.screen != null || !mc.options.getCameraType().isFirstPerson()) return;
         if (!WolfBuddyCharmSlot.isCharmEquipped(p.getMainHandItem())) return;
 
         ensureGeoLoaded();
         if (CUBES == null || CUBES.isEmpty()) return;
 
+        int sw = mc.getWindow().getGuiScaledWidth();
+        int sh = mc.getWindow().getGuiScaledHeight();
         boolean aiming = mc.options.keyUse.isDown();
-        Vec3 camPos = event.getCamera().getPosition();
-        Vec3 eye = p.getEyePosition(event.getPartialTick());
-        PoseStack ps = event.getPoseStack();
 
+        PoseStack ps = event.getGuiGraphics().pose();
         ps.pushPose();
-        ps.translate(eye.x - camPos.x, eye.y - camPos.y, eye.z - camPos.z);
-        ps.mulPose(Axis.YP.rotationDegrees(-p.getViewYRot(event.getPartialTick())));
-        ps.mulPose(Axis.XP.rotationDegrees(p.getViewXRot(event.getPartialTick())));
+        // Anchor keychain top hook right beside the side rail of your held gun
+        if (aiming) {
+            ps.translate(sw * 0.565f, sh * 0.56f, 250.0f);
+            ps.mulPose(Axis.YP.rotationDegrees(-24f));
+        } else {
+            ps.translate(sw * 0.645f, sh * 0.61f, 250.0f);
+            ps.mulPose(Axis.YP.rotationDegrees(-32f));
+        }
+        ps.mulPose(Axis.XP.rotationDegrees(186f)); // Flip Y-up Bedrock model into GUI coordinates
+        ps.scale(8.5f, 8.5f, 8.5f);
 
-        if (aiming) { ps.translate(-0.105f, -0.045f, 0.38f); ps.mulPose(Axis.YP.rotationDegrees(20f)); }
-        else { ps.translate(-0.215f, -0.085f, 0.44f); ps.mulPose(Axis.YP.rotationDegrees(28f)); }
-        ps.scale(0.025f, 0.025f, 0.025f);
-
-        RenderSystem.enableBlend(); RenderSystem.defaultBlendFunc(); RenderSystem.enableDepthTest(); RenderSystem.disableCull();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableCull();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         RenderSystem.setShaderTexture(0, WolfBuddyCharmSlot.CHARM_TEX);
-        Tesselator tes = Tesselator.getInstance(); BufferBuilder buf = tes.getBuilder();
+
+        Tesselator tes = Tesselator.getInstance();
+        BufferBuilder buf = tes.getBuilder();
         buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 
         for (GeoCube c : CUBES) {
@@ -115,12 +121,20 @@ public class WolfBuddyGeoRenderer {
                 ps.mulPose(Axis.ZP.rotationDegrees(swingZ * mul));
                 ps.mulPose(Axis.XP.rotationDegrees(swingX * mul));
             }
-            if (c.rotZ != 0f) { ps.translate(c.px, c.py, c.pz); ps.mulPose(Axis.ZP.rotationDegrees(c.rotZ)); ps.translate(-c.px, -c.py, -c.pz); }
+            if (c.rotZ != 0f) {
+                ps.translate(c.px, c.py, c.pz);
+                ps.mulPose(Axis.ZP.rotationDegrees(c.rotZ));
+                ps.translate(-c.px, -c.py, -c.pz);
+            }
             emitCube(buf, ps.last().pose(), c);
             ps.popPose();
         }
         tes.end();
-        RenderSystem.enableCull(); RenderSystem.disableBlend(); ps.popPose();
+
+        RenderSystem.enableCull();
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+        ps.popPose();
     }
 
     private static void emitCube(BufferBuilder b, Matrix4f m, GeoCube c) {
