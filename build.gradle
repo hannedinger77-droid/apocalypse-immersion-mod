@@ -81,6 +81,7 @@ tasks.named('processResources', ProcessResources) {
 tasks.named('jar', Jar) {
     manifest {
         attributes([
+                'MixinConfigs': 'apocalypseimmersion.mixins.json',
                 'Specification-Title'     : mod_id,
                 'Specification-Vendor'    : mod_authors,
                 'Specification-Version'   : '1',

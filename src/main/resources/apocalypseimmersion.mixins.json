@@ -1,21 +1,13 @@
 {
-  "required": true,
+  "required": false,
   "minVersion": "0.8",
   "package": "com.apocalypseimmersion.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "apocalypseimmersion.refmap.json",
-  "mixins": [
-    "LostCitiesToolsMixin",
-    "LeavesBlockMixin",
-    "SafeParticleParserMixin",
-    "SafeServerParticleMixin",
-    "SafeResourceLocationMixin"
-  ],
   "client": [
-    "HumanoidModelMixin",
-    
+    "BufferBuilderSelfHealMixin"
   ],
   "injectors": {
-    "defaultRequire": 0
+    "defaultRequire": 1
   }
 }
