@@ -55,3 +55,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `fc1c99f`)
 - Guard BufferBuilder.building() in DynamicShadowRenderer & world renderers for PiP scopes
+
+### Update (2026-11-20 - `a127d50`)
+- Cancel nested RenderLevelStageEvent during PiP scope passes when BufferBuilder is active
