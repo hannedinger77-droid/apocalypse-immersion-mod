@@ -99,7 +99,7 @@ public class LeafDappleRenderer {
     private static void drawPass(Matrix4f m, int targetType, ResourceLocation tex) {
         RenderSystem.setShaderTexture(0, tex);
         Tesselator tes = Tesselator.getInstance(); BufferBuilder buf = tes.getBuilder();
-        buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        if (buf.building()) return; buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
         boolean any = false;
         for (CachedQuad q : CACHE) {
             if (q.type != targetType) continue;

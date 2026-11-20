@@ -56,7 +56,7 @@ public class BreathFogGlassRenderer {
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
         RenderSystem.setShaderTexture(0, new ResourceLocation("apocalypseimmersion", "textures/misc/breath_fog.png"));
         Tesselator tes = Tesselator.getInstance(); BufferBuilder buf = tes.getBuilder();
-        buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        if (buf.building()) return; buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
         Matrix4f m = ps.last().pose();
         for (var en : FOG.entrySet()) {
             BlockPos p = en.getKey(); float raw = en.getValue(); float smooth = raw * raw * (3.0F - 2.0F * raw); float a = Math.min(0.95F, smooth * maxA); if (a <= 0.003F) continue;

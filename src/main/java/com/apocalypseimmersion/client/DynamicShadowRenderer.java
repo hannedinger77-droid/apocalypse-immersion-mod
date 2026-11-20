@@ -65,7 +65,7 @@ public class DynamicShadowRenderer {
         RenderSystem.enableBlend(); RenderSystem.defaultBlendFunc(); RenderSystem.enableDepthTest(); RenderSystem.depthMask(false); RenderSystem.disableCull();
         RenderSystem.setShader(GameRenderer::getPositionTexColorShader); RenderSystem.setShaderTexture(0, SHADOW_TEX);
         Tesselator tes = Tesselator.getInstance(); BufferBuilder buf = tes.getBuilder();
-        buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+        if (buf.building()) return; buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
         Matrix4f m = ps.last().pose(); boolean any = false;
 
         for (Entity ent : lvl.getEntities(null, p.getBoundingBox().inflate(maxR))) {

@@ -112,7 +112,7 @@ public class GunfireDynamicLightBridge {
 
         Tesselator tes = Tesselator.getInstance();
         BufferBuilder buf = tes.getBuilder();
-        buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        if (buf.building()) return; buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         Matrix4f m = ps.last().pose();
 
         Vec3 right = flashDir.cross(new Vec3(0, 1, 0)).normalize();
