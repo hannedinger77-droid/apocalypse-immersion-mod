@@ -100,3 +100,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `21cb222`)
 - Restore clean build.gradle with MixinConfigs and BufferBuilderSelfHealMixin
+
+### Update (2026-11-20 - `437c831`)
+- Fix valid JSON arrays in wolf_buddy_charm.geo.json so 3D charm renders in Blockbench & in-game
