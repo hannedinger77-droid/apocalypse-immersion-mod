@@ -61,3 +61,6 @@ All notable updates, new features, and fixes for **Apocalypse Immersion (1.20.1)
 
 ### Update (2026-11-20 - `2921c33`)
 - Fix Tesselator buffer cleanup in GlobalRenderStageGuardMixin (v1.7.30)
+
+### Update (2026-11-20 - `7acaa6c`)
+- Cancel RenderLevelStageEvent at HEAD when Oculus shadow BufferBuilder is active (v1.7.31)
