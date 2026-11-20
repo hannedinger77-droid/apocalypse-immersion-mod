@@ -97,7 +97,7 @@ public class DistantWarzoneAmbience {
             DelayedWarzoneCue c = QUEUE.get(i);
             if (c.delayTicks <= 1) {
                 playDirectionalDistant(mc, c.trueOrigin, c.sound, c.baseVol, c.pitch);
-                QUEUE.remove(i);
+                QUEUE.clear();
             } else {
                 QUEUE.set(i, new DelayedWarzoneCue(c.sound, c.trueOrigin, c.delayTicks - 1, c.baseVol, c.pitch));
             }
