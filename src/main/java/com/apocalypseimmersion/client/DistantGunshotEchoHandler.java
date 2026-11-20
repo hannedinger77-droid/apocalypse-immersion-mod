@@ -81,7 +81,13 @@ public class DistantGunshotEchoHandler {
         boolean isActualGunshot = (combined.contains("shoot") || combined.contains("fire") || combined.contains("shot"))
                 && (ns.contains("tacz") || ns.contains("pointblank") || ns.contains("simpleenemy") || combined.contains("gun"));
         if (ns.equals("tacz") && resolvedPath.isEmpty()) {
-            isActualGunshot = orig.getVolume() >= 1.55f;
+            try {
+                if (orig.getSound() != null) {
+                    isActualGunshot = orig.getVolume() >= 1.55f;
+                }
+            } catch (NullPointerException ignored) {
+                isActualGunshot = false;
+            }
         }
 
         Vec3 src = new Vec3(orig.getX(), orig.getY(), orig.getZ());
